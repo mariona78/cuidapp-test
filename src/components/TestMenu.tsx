@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -61,7 +60,7 @@ export const TestMenu = ({
       name: 'Altres',
       color: 'bg-yellow-500',
       icon: Circle,
-      tests: ['PAINAD', 'ESAS', 'EuroQOL 5D', 'Escala Visual Analògica', 'Escala ARMS', 'Índex MIG', 'Gérontopôle', 'HexCom-Red', 'Necpal 4.0']
+      tests: ['PAINAD', 'ESAS', 'EuroQOL 5D', 'Escala Visual Analògica', 'Escala ARMS', 'Índex MIG', 'Gérontopôle', 'HexCom-Red', 'Necpal 4.0', 'Gérontopôle Frailty Screening Test (GFST)', 'Índex Fràgil-VIG (IF-VIG)', 'HexCom-RED']
     }
   ];
 

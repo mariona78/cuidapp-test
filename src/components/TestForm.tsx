@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -43,7 +42,10 @@ export const TestForm = ({ category, patient, onTestCompleted, onBack }: TestFor
     ],
     'others': [
       { id: 'painad', name: 'PAINAD', questions: ['Respiració', 'Vocalització negativa', 'Expressió facial', 'Llenguatge corporal', 'Consolabilitat'] },
-      { id: 'esas', name: 'ESAS - Escala Simptomes', questions: ['Dolor', 'Cansament', 'Nàusees', 'Depressió', 'Ansietat', 'Somnolència', 'Apetit', 'Sensació benestar', 'Dificultat respirar'] }
+      { id: 'esas', name: 'ESAS - Escala Simptomes', questions: ['Dolor', 'Cansament', 'Nàusees', 'Depressió', 'Ansietat', 'Somnolència', 'Apetit', 'Sensació benestar', 'Dificultat respirar'] },
+      { id: 'gfst', name: 'Gérontopôle Frailty Screening Test (GFST)', questions: ['Pèrdua de pes involuntària', 'Fatiga', 'Grip strength', 'Velocitat de marxa', 'Activitat física'] },
+      { id: 'if-vig', name: 'Índex Fràgil-VIG (IF-VIG)', questions: ['Funcionalitat', 'Comorbiditat', 'Cognició', 'Estat nutricional', 'Risc social'] },
+      { id: 'hexcom-red', name: 'HexCom-RED', questions: ['Complexitat clínica', 'Complexitat social', 'Utilització serveis', 'Pronòstic', 'Preferències pacient'] }
     ]
   };
 
