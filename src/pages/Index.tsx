@@ -55,7 +55,7 @@ const Index = () => {
                 <img 
                   src="/lovable-uploads/733930ff-b5dd-4890-bbf7-2a2e76e1809f.png" 
                   alt="CuidApp Logo" 
-                  className="w-32 h-32 mx-auto object-contain"
+                  className="w-48 h-48 mx-auto object-contain"
                 />
               </div>
               
