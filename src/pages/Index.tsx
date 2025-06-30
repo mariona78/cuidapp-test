@@ -53,7 +53,7 @@ const Index = () => {
             <CardContent className="p-8 text-center space-y-8">
               <div className="relative">
                 <img 
-                  src="/lovable-uploads/75707a06-8b3f-426d-9960-4e1d479729a6.png" 
+                  src="/lovable-uploads/733930ff-b5dd-4890-bbf7-2a2e76e1809f.png" 
                   alt="CuidApp Logo" 
                   className="w-32 h-32 mx-auto object-contain"
                 />
