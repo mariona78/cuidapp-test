@@ -55,14 +55,11 @@ const Index = () => {
                 <img 
                   src="/lovable-uploads/733930ff-b5dd-4890-bbf7-2a2e76e1809f.png" 
                   alt="CuidApp Logo" 
-                  className="w-48 h-48 mx-auto object-contain"
+                  className="w-64 h-64 mx-auto object-contain"
                 />
               </div>
               
               <div className="space-y-4">
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-                  CuidApp
-                </h1>
                 <p className="text-gray-600 text-sm">
                   Aplicació per al registre de tests en atenció domiciliària
                 </p>
