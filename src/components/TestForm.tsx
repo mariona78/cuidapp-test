@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -40,12 +41,14 @@ export const TestForm = ({ category, patient, onTestCompleted, onBack }: TestFor
       { id: 'zarit7', name: 'Test de Zarit (7 items)', questions: ['Demana més ajuda', 'No té temps suficient', 'Estressat per cuidar', 'Vergonya comportament', 'Enfadat amb familiar', 'Afecta relacions', 'Por pel futur'] },
       { id: 'oslo3', name: 'Escala Oslo-3', questions: ['Nombre persones properes', 'Interès i preocupació', 'Facilitat obtenir ajuda'] }
     ],
-    'others': [
-      { id: 'painad', name: 'PAINAD', questions: ['Respiració', 'Vocalització negativa', 'Expressió facial', 'Llenguatge corporal', 'Consolabilitat'] },
-      { id: 'esas', name: 'ESAS - Escala Simptomes', questions: ['Dolor', 'Cansament', 'Nàusees', 'Depressió', 'Ansietat', 'Somnolència', 'Apetit', 'Sensació benestar', 'Dificultat respirar'] },
+    'frailty': [
       { id: 'gfst', name: 'Gérontopôle Frailty Screening Test (GFST)', questions: ['Pèrdua de pes involuntària', 'Fatiga', 'Grip strength', 'Velocitat de marxa', 'Activitat física'] },
       { id: 'if-vig', name: 'Índex Fràgil-VIG (IF-VIG)', questions: ['Funcionalitat', 'Comorbiditat', 'Cognició', 'Estat nutricional', 'Risc social'] },
       { id: 'hexcom-red', name: 'HexCom-RED', questions: ['Complexitat clínica', 'Complexitat social', 'Utilització serveis', 'Pronòstic', 'Preferències pacient'] }
+    ],
+    'others': [
+      { id: 'painad', name: 'PAINAD', questions: ['Respiració', 'Vocalització negativa', 'Expressió facial', 'Llenguatge corporal', 'Consolabilitat'] },
+      { id: 'esas', name: 'ESAS - Escala Simptomes', questions: ['Dolor', 'Cansament', 'Nàusees', 'Depressió', 'Ansietat', 'Somnolència', 'Apetit', 'Sensació benestar', 'Dificultat respirar'] }
     ]
   };
 

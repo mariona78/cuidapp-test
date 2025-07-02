@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, CheckCircle, Circle, User, Brain, Heart, Users, Stethoscope, Settings } from 'lucide-react';
+import { ArrowLeft, CheckCircle, Circle, User, Brain, Heart, Users, Stethoscope, Settings, Activity } from 'lucide-react';
 
 interface TestMenuProps {
   selectedPatient: string;
@@ -56,11 +56,18 @@ export const TestMenu = ({
       tests: ['Risc Social', 'Escala de TSO', 'Sobrecàrrega Cuidador', 'SSM-Cat', 'Test de Zarit (7 items)', 'Test de Zarit (22 items)', 'Escala Oslo-3']
     },
     {
+      id: 'frailty',
+      name: 'Valoració de fragilitat',
+      color: 'bg-orange-500',
+      icon: Activity,
+      tests: ['Gérontopôle Frailty Screening Test (GFST)', 'Índex Fràgil-VIG (IF-VIG)', 'HexCom-RED']
+    },
+    {
       id: 'others',
       name: 'Altres',
       color: 'bg-yellow-500',
       icon: Circle,
-      tests: ['PAINAD', 'ESAS', 'EuroQOL 5D', 'Escala Visual Analògica', 'Escala ARMS', 'Índex MIG', 'Gérontopôle', 'HexCom-Red', 'Necpal 4.0', 'Gérontopôle Frailty Screening Test (GFST)', 'Índex Fràgil-VIG (IF-VIG)', 'HexCom-RED']
+      tests: ['PAINAD', 'ESAS', 'EuroQOL 5D', 'Escala Visual Analògica', 'Escala ARMS', 'Índex MIG', 'Gérontopôle', 'HexCom-Red', 'Necpal 4.0']
     }
   ];
 
