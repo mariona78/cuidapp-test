@@ -84,17 +84,17 @@ export const AssessmentOverview = ({ onStartAssessment }: AssessmentOverviewProp
   const getPositionClasses = (position: string) => {
     switch (position) {
       case 'top-left':
-        return 'absolute top-0 left-0 w-80';
+        return 'absolute top-4 left-4 w-72';
       case 'top-right':
-        return 'absolute top-0 right-0 w-80';
+        return 'absolute top-4 right-4 w-72';
       case 'middle-right':
-        return 'absolute top-1/2 right-0 w-80 -translate-y-1/2';
+        return 'absolute top-1/2 right-4 w-72 -translate-y-1/2';
       case 'bottom-right':
-        return 'absolute bottom-0 right-0 w-80';
+        return 'absolute bottom-4 right-4 w-72';
       case 'bottom-left':
-        return 'absolute bottom-0 left-0 w-80';
+        return 'absolute bottom-4 left-4 w-72';
       case 'middle-left':
-        return 'absolute top-1/2 left-0 w-80 -translate-y-1/2';
+        return 'absolute top-1/2 left-4 w-72 -translate-y-1/2';
       default:
         return '';
     }
@@ -123,14 +123,14 @@ export const AssessmentOverview = ({ onStartAssessment }: AssessmentOverviewProp
         </div>
 
         {/* Central Diagram */}
-        <div className="relative w-full h-[600px] flex items-center justify-center">
+        <div className="relative w-full h-[700px] flex items-center justify-center mb-8">
           {/* Central Circle */}
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-64 h-64 bg-gradient-to-br from-purple-400 to-blue-400 rounded-full flex flex-col items-center justify-center text-white shadow-2xl z-10">
-              <div className="text-center">
-                <div className="text-xl font-bold mb-2">ESCALES PER A LA</div>
-                <div className="text-lg font-semibold mb-1">VALORACIÓ</div>
-                <div className="text-lg font-semibold">MULTIDIMENSIONAL</div>
+            <div className="w-48 h-48 bg-gradient-to-br from-purple-400 to-blue-400 rounded-full flex flex-col items-center justify-center text-white shadow-2xl z-10">
+              <div className="text-center px-4">
+                <div className="text-base font-bold mb-1">ESCALES PER A LA</div>
+                <div className="text-sm font-semibold mb-1">VALORACIÓ</div>
+                <div className="text-sm font-semibold">MULTIDIMENSIONAL</div>
               </div>
             </div>
           </div>
@@ -140,14 +140,14 @@ export const AssessmentOverview = ({ onStartAssessment }: AssessmentOverviewProp
             const Icon = category.icon;
             return (
               <div key={category.id} className={getPositionClasses(category.position)}>
-                <Card className={`${category.borderColor} border-2 bg-white/90 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105`}>
-                  <CardHeader className="pb-3">
-                    <CardTitle className="flex items-center gap-3">
+                <Card className={`${category.borderColor} border-2 bg-white/95 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105`}>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="flex items-center gap-2">
                       <div className={`${category.color} p-2 rounded-lg text-white`}>
-                        <Icon className="w-5 h-5" />
+                        <Icon className="w-4 h-4" />
                       </div>
                       <div>
-                        <div className={`font-semibold ${category.textColor}`}>
+                        <div className={`font-semibold text-sm ${category.textColor}`}>
                           {category.name}
                         </div>
                         <Badge variant="outline" className="text-xs">
@@ -156,17 +156,17 @@ export const AssessmentOverview = ({ onStartAssessment }: AssessmentOverviewProp
                       </div>
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="pt-0">
+                  <CardContent className="pt-0 pb-3">
                     <div className="space-y-1">
-                      {category.tests.slice(0, 4).map((test, index) => (
-                        <div key={index} className="text-sm text-gray-600 flex items-center gap-2">
-                          <Circle className="w-2 h-2 fill-current" />
-                          {test}
+                      {category.tests.slice(0, 3).map((test, index) => (
+                        <div key={index} className="text-xs text-gray-600 flex items-center gap-1">
+                          <Circle className="w-1.5 h-1.5 fill-current" />
+                          <span className="truncate">{test}</span>
                         </div>
                       ))}
-                      {category.tests.length > 4 && (
+                      {category.tests.length > 3 && (
                         <div className="text-xs text-gray-500 italic">
-                          +{category.tests.length - 4} més...
+                          +{category.tests.length - 3} més...
                         </div>
                       )}
                     </div>
@@ -179,21 +179,27 @@ export const AssessmentOverview = ({ onStartAssessment }: AssessmentOverviewProp
           {/* Connection Lines */}
           <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
             {/* Lines connecting center to each category */}
-            {categories.map((category, index) => {
-              const angle = (index * 60) * (Math.PI / 180); // 60 degrees apart
-              const centerX = 400; // Approximate center
-              const centerY = 300;
-              const radius = 150;
-              const endX = centerX + Math.cos(angle) * radius;
-              const endY = centerY + Math.sin(angle) * radius;
+            {categories.map((_, index) => {
+              const positions = [
+                { x: 200, y: 150 }, // top-left
+                { x: 600, y: 150 }, // top-right  
+                { x: 600, y: 350 }, // middle-right
+                { x: 600, y: 550 }, // bottom-right
+                { x: 200, y: 550 }, // bottom-left
+                { x: 200, y: 350 }  // middle-left
+              ];
+              
+              const centerX = 400;
+              const centerY = 350;
+              const pos = positions[index];
               
               return (
                 <line
-                  key={category.id}
+                  key={index}
                   x1={centerX}
                   y1={centerY}
-                  x2={endX}
-                  y2={endY}
+                  x2={pos.x}
+                  y2={pos.y}
                   stroke="#e5e7eb"
                   strokeWidth="2"
                   strokeDasharray="5,5"
