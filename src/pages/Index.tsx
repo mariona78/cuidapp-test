@@ -6,8 +6,9 @@ import { PatientSelector } from '@/components/PatientSelector';
 import { TestMenu } from '@/components/TestMenu';
 import { TestForm } from '@/components/TestForm';
 import { FinalAssessment } from '@/components/FinalAssessment';
+import { AssessmentOverview } from '@/components/AssessmentOverview';
 
-type AppState = 'home' | 'patient-selection' | 'test-menu' | 'test-form' | 'assessment';
+type AppState = 'home' | 'overview' | 'patient-selection' | 'test-menu' | 'test-form' | 'assessment';
 
 const Index = () => {
   const [currentState, setCurrentState] = useState<AppState>('home');
@@ -16,6 +17,10 @@ const Index = () => {
   const [completedTests, setCompletedTests] = useState<string[]>([]);
 
   const handleStart = () => {
+    setCurrentState('overview');
+  };
+
+  const handleStartAssessment = () => {
     setCurrentState('patient-selection');
   };
 
@@ -78,6 +83,10 @@ const Index = () => {
             </CardContent>
           </Card>
         </div>
+      )}
+
+      {currentState === 'overview' && (
+        <AssessmentOverview onStartAssessment={handleStartAssessment} />
       )}
 
       {currentState === 'patient-selection' && (
