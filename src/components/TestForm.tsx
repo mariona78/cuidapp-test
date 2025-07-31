@@ -6,6 +6,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, CheckCircle } from 'lucide-react';
+import { FragilVigCalculator } from './FragilVigCalculator';
 
 interface TestFormProps {
   category: string;
@@ -14,12 +15,19 @@ interface TestFormProps {
   onBack: () => void;
 }
 
+interface TestItem {
+  id: string;
+  name: string;
+  questions: string[];
+  isCalculator?: boolean;
+}
+
 export const TestForm = ({ category, patient, onTestCompleted, onBack }: TestFormProps) => {
   const [selectedTest, setSelectedTest] = useState<string>('');
   const [responses, setResponses] = useState<Record<string, string>>({});
   const [observations, setObservations] = useState('');
 
-  const categoryTests = {
+  const categoryTests: Record<string, TestItem[]> = {
     'geriatric-syndromes': [
       { id: 'aat', name: 'AAT - Avaluació Anticoagulant', questions: ['Risc de sagnat', 'Adherència al tractament', 'Control INR'] },
       { id: 'cam', name: 'CAM - Confusion Assessment Method', questions: ['Inici agut', 'Atenció', 'Pensament desorganitzat', 'Nivell de consciència'] },
@@ -43,7 +51,7 @@ export const TestForm = ({ category, patient, onTestCompleted, onBack }: TestFor
     ],
     'frailty': [
       { id: 'gfst', name: 'Gérontopôle Frailty Screening Test (GFST)', questions: ['Pèrdua de pes involuntària', 'Fatiga', 'Grip strength', 'Velocitat de marxa', 'Activitat física'] },
-      { id: 'if-vig', name: 'Índex Fràgil-VIG (IF-VIG)', questions: ['Funcionalitat', 'Comorbiditat', 'Cognició', 'Estat nutricional', 'Risc social'] },
+      { id: 'if-vig', name: 'Calculadora Índex Fràgil-VIG (IF-VIG)', questions: [], isCalculator: true },
       { id: 'hexcom-red', name: 'HexCom-RED', questions: ['Complexitat clínica', 'Complexitat social', 'Utilització serveis', 'Pronòstic', 'Preferències pacient'] }
     ],
     'others': [
@@ -71,6 +79,13 @@ export const TestForm = ({ category, patient, onTestCompleted, onBack }: TestFor
     const test = currentTests.find(t => t.id === selectedTest);
     if (test) {
       onTestCompleted(test.name);
+    }
+  };
+
+  const handleCalculatorComplete = (score: number, interpretation: string) => {
+    const test = currentTests.find(t => t.id === selectedTest);
+    if (test) {
+      onTestCompleted(`${test.name} - Puntuació: ${score} (${interpretation})`);
     }
   };
 
@@ -113,8 +128,10 @@ export const TestForm = ({ category, patient, onTestCompleted, onBack }: TestFor
                   onClick={() => handleTestSelection(test.id)}
                 >
                   <div>
-                    <div className="font-medium">{test.name}</div>
-                    <div className="text-xs text-gray-500">{test.questions.length} preguntes</div>
+                     <div className="font-medium">{test.name}</div>
+                     <div className="text-xs text-gray-500">
+                       {test.isCalculator ? 'Calculadora interactiva' : `${test.questions.length} preguntes`}
+                     </div>
                   </div>
                 </Button>
               ))}
@@ -124,12 +141,15 @@ export const TestForm = ({ category, patient, onTestCompleted, onBack }: TestFor
           {/* Test Form */}
           <div className="lg:col-span-2">
             {selectedTestData ? (
-              <Card className="bg-white/90 backdrop-blur-sm shadow-lg">
-                <CardHeader>
-                  <CardTitle className="text-lg">{selectedTestData.name}</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  {selectedTestData.questions.map((question, index) => (
+              selectedTestData.isCalculator ? (
+                <FragilVigCalculator onComplete={handleCalculatorComplete} />
+              ) : (
+                <Card className="bg-white/90 backdrop-blur-sm shadow-lg">
+                  <CardHeader>
+                    <CardTitle className="text-lg">{selectedTestData.name}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {selectedTestData.questions.map((question, index) => (
                     <div key={index} className="space-y-3">
                       <Label className="text-base font-medium">{index + 1}. {question}</Label>
                       <RadioGroup
@@ -182,7 +202,8 @@ export const TestForm = ({ category, patient, onTestCompleted, onBack }: TestFor
                     )}
                   </Button>
                 </CardContent>
-              </Card>
+                </Card>
+              )
             ) : (
               <Card className="bg-white/90 backdrop-blur-sm shadow-lg">
                 <CardContent className="p-12 text-center">
