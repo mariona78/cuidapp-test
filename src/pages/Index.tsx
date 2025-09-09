@@ -10,11 +10,18 @@ import { AssessmentOverview } from '@/components/AssessmentOverview';
 
 type AppState = 'home' | 'overview' | 'patient-selection' | 'test-menu' | 'test-form' | 'assessment';
 
+interface TestResult {
+  name: string;
+  score: number | null;
+  interpretation: string;
+  severity: 'normal' | 'mild' | 'severe';
+}
+
 const Index = () => {
   const [currentState, setCurrentState] = useState<AppState>('home');
   const [selectedPatient, setSelectedPatient] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<string>('');
-  const [completedTests, setCompletedTests] = useState<string[]>([]);
+  const [completedTests, setCompletedTests] = useState<TestResult[]>([]);
 
   const handleStart = () => {
     setCurrentState('overview');
@@ -34,8 +41,8 @@ const Index = () => {
     setCurrentState('test-form');
   };
 
-  const handleTestCompleted = (testName: string) => {
-    setCompletedTests(prev => [...prev, testName]);
+  const handleTestCompleted = (result: TestResult) => {
+    setCompletedTests(prev => [...prev, result]);
     setCurrentState('test-menu');
   };
 

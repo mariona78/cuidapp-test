@@ -8,10 +8,17 @@ import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, CheckCircle } from 'lucide-react';
 import { FragilVigCalculator } from './FragilVigCalculator';
 
+interface TestResult {
+  name: string;
+  score: number | null;
+  interpretation: string;
+  severity: 'normal' | 'mild' | 'severe';
+}
+
 interface TestFormProps {
   category: string;
   patient: string;
-  onTestCompleted: (testName: string) => void;
+  onTestCompleted: (result: TestResult) => void;
   onBack: () => void;
 }
 
@@ -75,17 +82,58 @@ export const TestForm = ({ category, patient, onTestCompleted, onBack }: TestFor
     }));
   };
 
+  const calculateScore = () => {
+    if (!selectedTestData) return null;
+    const values = Object.values(responses).map(Number);
+    return values.reduce((sum, val) => sum + val, 0);
+  };
+
+  const getSeverityFromScore = (score: number, maxScore: number) => {
+    const percentage = (score / maxScore) * 100;
+    if (percentage <= 33) return 'normal';
+    if (percentage <= 66) return 'mild';
+    return 'severe';
+  };
+
   const handleSubmit = () => {
     const test = currentTests.find(t => t.id === selectedTest);
     if (test) {
-      onTestCompleted(test.name);
+      const score = calculateScore();
+      const maxScore = test.questions.length * 3;
+      const severity = score ? getSeverityFromScore(score, maxScore) : 'normal';
+      
+      let interpretation = 'Sense alteracions';
+      if (severity === 'mild') interpretation = 'Alteracions lleus';
+      if (severity === 'severe') interpretation = 'Alteracions severes';
+
+      const result: TestResult = {
+        name: test.name,
+        score,
+        interpretation,
+        severity
+      };
+      
+      onTestCompleted(result);
     }
   };
 
   const handleCalculatorComplete = (score: number, interpretation: string) => {
     const test = currentTests.find(t => t.id === selectedTest);
     if (test) {
-      onTestCompleted(`${test.name} - Puntuació: ${score} (${interpretation})`);
+      // Determina la severitat basada en la interpretació
+      let severity: 'normal' | 'mild' | 'severe' = 'normal';
+      if (interpretation.includes('Risc baix')) severity = 'normal';
+      else if (interpretation.includes('Risc mitjà')) severity = 'mild';
+      else if (interpretation.includes('Risc alt')) severity = 'severe';
+
+      const result: TestResult = {
+        name: test.name,
+        score,
+        interpretation,
+        severity
+      };
+      
+      onTestCompleted(result);
     }
   };
 

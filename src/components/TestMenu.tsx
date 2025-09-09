@@ -3,9 +3,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, CheckCircle, Circle, User, Brain, Heart, Users, Stethoscope, Settings, Activity } from 'lucide-react';
 
+interface TestResult {
+  name: string;
+  score: number | null;
+  interpretation: string;
+  severity: 'normal' | 'mild' | 'severe';
+}
+
 interface TestMenuProps {
   selectedPatient: string;
-  completedTests: string[];
+  completedTests: TestResult[];
   onCategorySelected: (category: string) => void;
   onFinishAssessment: () => void;
   onBack: () => void;
@@ -72,7 +79,9 @@ export const TestMenu = ({
   ];
 
   const getCategoryProgress = (categoryTests: string[]) => {
-    const completedInCategory = categoryTests.filter(test => completedTests.includes(test)).length;
+    const completedInCategory = categoryTests.filter(test => 
+      completedTests.some(completed => completed.name.includes(test))
+    ).length;
     return { completed: completedInCategory, total: categoryTests.length };
   };
 
@@ -156,6 +165,43 @@ export const TestMenu = ({
             );
           })}
         </div>
+
+        {/* Completed Tests Summary */}
+        {totalCompleted > 0 && (
+          <Card className="bg-white/90 backdrop-blur-sm shadow-lg">
+            <CardHeader>
+              <CardTitle className="text-lg">Tests Completats</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-3">
+                {completedTests.map((test, index) => {
+                  const getSeverityColor = (severity: string) => {
+                    switch (severity) {
+                      case 'normal': return 'bg-green-100 text-green-800 border-green-200';
+                      case 'mild': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+                      case 'severe': return 'bg-red-100 text-red-800 border-red-200';
+                      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+                    }
+                  };
+
+                  return (
+                    <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div className="flex-1">
+                        <div className="font-medium text-gray-900">{test.name}</div>
+                        {test.score !== null && (
+                          <div className="text-sm text-gray-600">Puntuació: {test.score}</div>
+                        )}
+                      </div>
+                      <Badge className={`text-xs ${getSeverityColor(test.severity)}`}>
+                        {test.interpretation}
+                      </Badge>
+                    </div>
+                  );
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Finish Assessment Button */}
         {totalCompleted > 0 && (

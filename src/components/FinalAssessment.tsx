@@ -5,9 +5,16 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { FileText, User, Calendar, RotateCcw, Download } from 'lucide-react';
 
+interface TestResult {
+  name: string;
+  score: number | null;
+  interpretation: string;
+  severity: 'normal' | 'mild' | 'severe';
+}
+
 interface FinalAssessmentProps {
   patient: string;
-  completedTests: string[];
+  completedTests: TestResult[];
   onReset: () => void;
 }
 
@@ -31,10 +38,15 @@ export const FinalAssessment = ({ patient, completedTests, onReset }: FinalAsses
 
   const getOverallAssessment = () => {
     const testCount = completedTests.length;
-    if (testCount >= 15) return { level: 'Completa', color: 'bg-green-500', description: 'Valoració multidimensional completa realitzada' };
-    if (testCount >= 8) return { level: 'Adequada', color: 'bg-blue-500', description: 'Valoració adequada amb àrees clau avaluades' };
-    if (testCount >= 4) return { level: 'Bàsica', color: 'bg-yellow-500', description: 'Valoració bàsica completada' };
-    return { level: 'Limitada', color: 'bg-red-500', description: 'Valoració limitada, considerar ampliar avaluació' };
+    const severeTests = completedTests.filter(test => test.severity === 'severe').length;
+    const mildTests = completedTests.filter(test => test.severity === 'mild').length;
+    
+    // Avaluació basada en quantitat i severitat
+    if (severeTests > 2) return { level: 'Risc Alt', color: 'bg-red-500', description: 'Múltiples alteracions severes detectades' };
+    if (severeTests > 0 || mildTests > 3) return { level: 'Risc Mitjà', color: 'bg-yellow-500', description: 'Alteracions moderades detectades' };
+    if (testCount >= 8) return { level: 'Valoració Completa', color: 'bg-green-500', description: 'Valoració satisfactòria sense alteracions significatives' };
+    if (testCount >= 4) return { level: 'Valoració Parcial', color: 'bg-blue-500', description: 'Valoració bàsica completada' };
+    return { level: 'Valoració Limitada', color: 'bg-gray-500', description: 'Valoració insuficient, ampliar avaluació' };
   };
 
   const assessment = getOverallAssessment();
@@ -97,13 +109,38 @@ export const FinalAssessment = ({ patient, completedTests, onReset }: FinalAsses
             </div>
             
             <div className="bg-gray-50 p-4 rounded-lg">
-              <h4 className="font-semibold mb-2">Resum d'àrees avaluades:</h4>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                {completedTests.map((test, index) => (
-                  <Badge key={index} variant="outline" className="justify-start">
-                    {test}
-                  </Badge>
-                ))}
+              <h4 className="font-semibold mb-4">Resultats dels tests:</h4>
+              <div className="space-y-3">
+                {completedTests.map((test, index) => {
+                  const getSeverityColor = (severity: string) => {
+                    switch (severity) {
+                      case 'normal': return 'bg-green-100 text-green-800 border-green-200';
+                      case 'mild': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+                      case 'severe': return 'bg-red-100 text-red-800 border-red-200';
+                      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+                    }
+                  };
+
+                  return (
+                    <div key={index} className="bg-white p-3 rounded-lg border">
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <h5 className="font-medium text-gray-900">{test.name}</h5>
+                          <div className="flex items-center gap-2 mt-1">
+                            {test.score !== null && (
+                              <span className="text-sm text-gray-600">
+                                Puntuació: {test.score}
+                              </span>
+                            )}
+                            <Badge className={`text-xs ${getSeverityColor(test.severity)}`}>
+                              {test.interpretation}
+                            </Badge>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </CardContent>
